@@ -320,7 +320,7 @@ var task = new swf.decider.Task({
 ```
 
 #### Reacting to Lifecycle Events
-A task may need to perform conditional logic around which task is run next.  Depending on the task, you can register either a generic event category (`Scheduled`, `Started`, `Completed`, `Failed`, `Backoff`) or an exact event name, such as `LambdaFunctionCompleted`.
+A task may need to perform conditional logic around which task is run next.  You can register handlers for different final events: `onCompleted`, `onFailed`, and `onCanceled`.
 
 If, for example, a task needs to run _N_ number of times, based upon the input from the workflow, then you can create a task:
 
@@ -329,13 +329,18 @@ var task = new swf.decider.Task({
   type: 'activity',
   name: 'Prepare for parallel processing'
 })
-.on('Completed', function (event, taskEvents) {
-  var iterations = taskEvents.parseProperty('$$Workflow.parallel_tasks');
+.onCompleted(function (event, taskEvents) {
+  var iterations = event.parseProperty('$$Workflow.parallel_tasks');
   var tasks = [];
   for (var i = 0; i < iterations; i++) {
     tasks.push(new Task({
       type: 'activity',
-      name: 'Dynamic activity ' + i
+      name: 'Dynamic activity ' + i,
+      activityType: 'My Cool Activity',
+      activityVersion: '1.0',
+      input: {
+        index: i
+      }
     }));
   }
   return new swf.pipeline.Parallel(tasks);
@@ -344,13 +349,28 @@ var task = new swf.decider.Task({
 
 If a task returns actions, tasks, or pipelines from its event handler, then the task that generated said items will not be considered fully complete until those child items are complete.
 
-Different task types respond to different events:
+If the very first action needs specific logic, then the workflowStart pseudo-task can be used:
 
-* **activity**: ()
-* **timer**: ()
-* **lambdaFunction**: ()
-* **childWorkflow**: ()
-
+```javascript
+var pipe = new swf.decider.Pipelines.Serial({
+  new swf.decider.WorkflowStart(function (workflowStartEvent) {
+    var iterations = workflowStartEvent.getOutput().iterations;
+    var tasks = [];
+    for (var i = 0; i < iterations; i++) {
+      tasks.push(new Task({
+        type: 'activity',
+        name: 'Dynamic activity ' + i,
+        activityType: 'My Cool Activity',
+        activityVersion: '1.0',
+        input: {
+          index: i
+        }
+      }));
+    }
+    return new swf.pipeline.Parallel(tasks);
+  });
+});
+```
 
 #### Timeout Configuration
 SWF allows you to configure four different [timeouts](http://docs.aws.amazon.com/amazonswf/latest/apireference/API_ScheduleActivityTaskDecisionAttributes.html): `scheduleToStartTimeout`, `scheduleToCloseTimeout`, `startToCloseTimeout`, and `heartbeatTimeout`. You can provide these timeouts via your task configuration like so:
