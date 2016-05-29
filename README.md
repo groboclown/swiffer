@@ -207,6 +207,73 @@ var myPipe = new pipelines.Continuous([
 ]).onSignal('StopMyActivity', 'break');
 ```
 
+#### Asynchronous Pipeline
+An asynchronous pipeline is a sophisticated pipeline that allows for simulating
+a single SWF task, but without the need for an activity listener.  This works
+by taking advantage of SWF features, like timers, signals, lambdas, and markers,
+to allow you to run a task in AWS Spark, Hadoop, or Docker task through ECS
+on demand.
+
+The pipeline is created like so, and can be used in place of a task or other
+pipeline.  Note that, for this pipeline, you don't add in tasks.
+
+```javascript
+var myAsyncPipe = new pipelines.AsyncPipeline({
+  name: 'My Task-Like Pipeline',
+  functionName: 'ExecutedLambdaFunction',
+  input: '$$Workflow.task.input',
+  lambdaStartToCloseTimeout: 300,
+  startToCloseTimeout: 300,
+  scheduleToStartTimeout: 300,
+  retryStrategy: null
+});
+```
+
+The pipeline will trigger a task to cause the given lambda function name
+to run, using the `input` field as input.  Note that the input value must
+be either a dynamic input value (see below) pointing to an object, `null`,
+or an object.  It will be augmented to include these additional values, for
+use by the lambda to pass on to the activity it launches:
+
+```json
+{
+   // pre-existing values
+  "async": {
+    "workflowExecution": {
+      "workflowId": "pipeline's workflow id",
+      "runId": "pipeline's workflow's run id"
+    },
+    "signals": {
+      "started": "signal name for the 'started' action",
+      "completed": "signal name for the 'completed' action",
+      "failed": "signal name for the 'failed' action",
+      "heartbeat": "signal name for the 'heartbeat' action"
+    }
+  }
+}
+```
+
+The activity that the lambda launches is responsible for sending signals
+back to the workflow to indicate its status.
+
+- It sends the "started" signal
+(with the `signalName` value set to the above "started" name) to indicate that
+it has begun.  If that signal is not received before the async pipeline's
+`scheduleToStartTimeout` time expires (expressed in seconds), then the
+pipeline will fail due to a timeout.
+- It sends the "completed" or "failed" signal to indicate that it has finished.
+if the signal is not received before the async pipeline's `startToCloseTimeout`
+time expires (expressed in seconds after the "started" signal is received), then
+the pipeline will fail due to a timeout.
+- The heartbeat may be sent by the activity.  Currently, there is no monitoring
+of the heartbeat signal.  However, it can be used by the activity to discover
+whether the workflow is still alive or not.
+
+Because the heartbeat signal will only report a failure back to the activity
+if the workflow is finished, it is useful to run the async pipeline as its own
+workflow, and call into it as a child workflow.
+
+
 ### Signaling Pipelines
 All pipelines can react to a signal and start either a single task or a child pipeline.
 
