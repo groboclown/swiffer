@@ -1,13 +1,26 @@
 {
-  "name": "swiffer-framework",
-  "version": "0.7.0",
-  "description": "This is a highly configurable, abstract NodeJS framework for Amazon's Simple Workflow Service (SWF)",
+  "name": "swiffer-decider",
+  "version": "1.0.0",
+  "description": "A NodeJS tool for creating flexible AWS Simple Workflow Service (SWF) deciders",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/jasmine-node --captureExceptions ."
   },
-  "author": "Jason Raede <jason@dispatch.me>",
+  "contributors": [
+    {
+      "name": "Matt Albrecht",
+      "email": "groboclown@gmail.com"
+    },
+    {
+      "name": "Jason Raede",
+      "email": "jason@dispatch.me"
+    }
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/groboclown/swiffer-decider"
+  },
   "dependencies": {
     "bluebird": "^2.9.33",
     "dot-component": "^0.1.1",

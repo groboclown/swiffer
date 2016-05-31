@@ -1,4 +1,6 @@
-This is a highly configurable, abstract NodeJS framework for Amazon's [Simple Workflow Service](http://aws.amazon.com/documentation/swf/) (SWF). It allows you to configure your decisions through a combination of **Pipelines** and **Tasks** (see below), the end result being complete separation between your decider, your activity poller (worker), and the actual activities.
+This is a NodeJS framework for constructing deciders for Amazon's [Simple Workflow Service](http://aws.amazon.com/documentation/swf/) (SWF). It allows you to configure your decisions through a combination of **Pipelines** and **Tasks** (see below), the end result being complete separation between your decider, your activity poller (worker), and the actual activities.
+
+This is a modified version of the great [swiffer-framework](https://github.com/DispatchMe/swiffer) by Jason Raede of Dispatch Me.
 
 # Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
