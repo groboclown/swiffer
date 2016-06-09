@@ -418,29 +418,6 @@ var task = new swf.decider.Task({
 
 If a task returns actions, tasks, or pipelines from its event handler, then the task that generated said items will not be considered fully complete until those child items are complete.
 
-If the very first action needs specific logic, then the workflowStart pseudo-task can be used:
-
-```javascript
-var pipe = new swf.decider.Pipelines.Serial({
-  new swf.decider.WorkflowStart(function (workflowStartEvent) {
-    var iterations = workflowStartEvent.getOutput().iterations;
-    var tasks = [];
-    for (var i = 0; i < iterations; i++) {
-      tasks.push(new Task({
-        type: 'activity',
-        name: 'Dynamic activity ' + i,
-        activityType: 'My Cool Activity',
-        activityVersion: '1.0',
-        input: {
-          index: i
-        }
-      }));
-    }
-    return new swf.pipeline.Parallel(tasks);
-  });
-});
-```
-
 #### Timeout Configuration
 SWF allows you to configure four different [timeouts](http://docs.aws.amazon.com/amazonswf/latest/apireference/API_ScheduleActivityTaskDecisionAttributes.html): `scheduleToStartTimeout`, `scheduleToCloseTimeout`, `startToCloseTimeout`, and `heartbeatTimeout`. You can provide these timeouts via your task configuration like so:
 
