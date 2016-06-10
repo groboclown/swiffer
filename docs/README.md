@@ -7,6 +7,16 @@ With `swiffer-decider`, you define workflows as a collection of
 You also can construct the workflow [execution order at runtime](logic.md)
 based on previous events in the workflow.
 
+
+## Documentation Index
+
+* [Task Usage and API](task.md)
+* [Pipeline Usage and API](pipeline.md)
+* [Decier Usage and API](decider.md)
+* [Adding Logic to the Workflow](logic.md)
+* [Design of the Framework](swiffer-design.md)
+* [Registering Domains, Workflow Types, and Activity Types](register.md)
+
 ## Actual Amazon Docs
 
 You may find the actual Amazon documentation as a helpful tool in understanding

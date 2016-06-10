@@ -53,12 +53,12 @@ var workflowPipeline = swf.createSeriesPipeline([
         // If the activity fails, send an email...
         return swf.createSeriesPipeline([
           swf.createActivityTask({
-            name: "Announce completion",
+            name: "Announce failure",
             activityType: "Send Email",
             activityVersion: "1.2-final",
             input: {
-              subject: "Processing Completed",
-              body: "All Files Processed",
+              subject: "Processing failed for " + filename,
+              body: "File " + filename + " failed: " + errEvent.getRawOuput(),
               to: "admins@my.site"
             }
           }),
@@ -97,7 +97,7 @@ var swfClient = new AWS.SWF({
 });
 
 swf.createDecider(workflowPipeline, swfClient, {
-  domain: constants.DOMAIN,
+  domain: 'My Domain',
   identity: 'Process Incoming Files',
   taskList: {
     name: 'processIncomingFiles',
