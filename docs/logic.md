@@ -156,6 +156,11 @@ function getWorkflowInputFiles(eventlist) {
 }
 ```
 
+The `generateTasks` function is an alias for `generateTask`; both allow for
+returning either one task or a list of tasks.  If more than one task is
+returned, it is run in a Series pipeline.
+
+
 ## Reacting to Events
 
 A workflow may also need to react to a task finishing.  Tasks can fail,

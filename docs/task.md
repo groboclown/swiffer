@@ -69,6 +69,36 @@ Activity tasks trigger the corresponding worker. They are made up of a `name`,
     decider how to handle error conditions with the activity task.  The default
     strategy is `None` (do not retry the activity)
 
+##### Example    
+
+```javascript
+var task = new swf.decider.Task({
+  type:'activity',
+  name:'My Cool Activity',
+  activityVersion:'0.1',
+  input:{
+    foo:'bar'
+  }
+});
+```
+
+Runs the registered activity type "My Cool Activity", version
+"0.1".  The generated activity request will include the input text
+`{"foo":"bar"}`.
+
+##### Example
+
+```javascript
+var task = swf.createActivityTask({
+  name: 'My Cool Activity 2',
+  activityType: 'My Cool Activity',
+  activityVersion: '0.1'
+});
+```
+
+Runs the registered activity type "My Cool Activity", version "0.1".
+It is also given the name "My Cool Activity 2", which allows for multiple runs
+of the same activity type within the same workflow.
 
 
 ### Timer
@@ -216,7 +246,6 @@ use by the lambda to pass on to the activity it launches:
 
 ```json
 {
-   // pre-existing values
   "async": {
     "workflowExecution": {
       "workflowId": "pipeline's workflow id",
