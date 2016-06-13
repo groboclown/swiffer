@@ -10,7 +10,8 @@ Dispatch Me.  This fork attempts to maintain as much backwards compatibility
 as possible.
 
 # Installation
-`npm install swiffer-decider`
+
+`npm install -s swiffer-decider`
 
 # Usage
 
@@ -116,11 +117,13 @@ For full documentation on using the framework, please reference
 [the documentation](docs/README.md).
 
 # Support
+
 Please create an issue if you believe you have found a bug or are having
 trouble. If you're able, please create a failing test for the bug you find so
 we can easily address it.
 
 # Contributions
+
 Contributions are welcome. Please follow the guideines in `.jshintrc` and use
 [JSBeautify](https://github.com/beautify-web/js-beautify) before pushing. Also,
 make sure your code is tested with [jasmine-node](https://github.com/mhevery/jasmine-node)

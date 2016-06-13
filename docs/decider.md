@@ -16,9 +16,7 @@ var workflowPipeline = swf.createSerialPipeline([ /* tasks */ ]);
 var decider = swf.createDecider(workflowPipeline, swfClient, {
   domain: 'My Domain',
   identity: 'Unique Decider ID',
-  taskList: {
-    name: 'workflow event channel name',
-  },
+  taskList: name: 'workflow event channel name'
 });
 ```
 
@@ -30,7 +28,22 @@ decider.start();
 
 ## Decider Setup
 
-(how to setup a decider, and what all the arguments mean)
+The decider creation method, `createDecider` takes 3 arguments:
+
+* `pipeline` - the top-level [pipeline](pipeline.md) of tasks.
+* `swfClient` - the AWS sdk SWF object, created by the a call to
+  `new require('aws-sdk').SWF(config)`
+* `config` - configuration options for the decider.
+  * `identity` - the name by which the decider declares itself to SWF.  This
+    allows for tracing the workflow history to the decider that handled the
+    workflow history.
+  * `taskList` - an object with a `name` set to the task list that the
+    decider polls for decision tasks.  Can be a string, in which case the
+    object will be created for you.
+  * `domain` - the name of the domain containing the task list.
+
+  
+
 
 ## Decider Events
 

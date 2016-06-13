@@ -12,7 +12,7 @@ based on previous events in the workflow.
 
 * [Task Usage and API](task.md)
 * [Pipeline Usage and API](pipeline.md)
-* [Decier Usage and API](decider.md)
+* [Decider Usage and API](decider.md)
 * [Adding Logic to the Workflow](logic.md)
 * [Design of the Framework](swiffer-design.md)
 * [Registering Domains, Workflow Types, and Activity Types](register.md)
